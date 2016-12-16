@@ -21,8 +21,10 @@ const PizzaModel = new Schema({
     price: Number
 });
 
+const connection = mongoose.createConnection('mongodb://localhost:27017/awesomepizza');
 const Admin = connection.model('Admin', AdminModel),
-    Pizza = connection.model('Pizza', PizzaModel);
+      Pizza = connection.model('Pizza', PizzaModel);
+
 module.exports = {
     Admin: Admin,
     Pizza: Pizza

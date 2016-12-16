@@ -1,7 +1,6 @@
 "use strict";
 const express = require('express'),
     path = require('path'),
-    favicon = require('serve-favicon'),
     logger = require('morgan'),
     debug = require('debug')('taskBoardProject:server'),
     lessMiddleware = require('less-middleware'),
@@ -14,7 +13,7 @@ const express = require('express'),
 
 
 const routes = require('./routes/index');
-
+import {Admin} from "./models/Model";
 const app = express();
 
 // view engine setup
@@ -44,7 +43,7 @@ app.locals.performDate = function (data) {
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 app.use(session({
-  name: 'taskboard',
+  name: 'awesomepizza',
   secret: 'lgetmoremoney',
   cookie: {path: '/', httpOnly: true, secure: false, maxAge: 1000 * 60 * 60 * 24},
   resave: true,
@@ -54,29 +53,32 @@ app.use(session({
 //===================================================================
 //========================= passport.js =============================
 
-/*const passport = require('passport')
-    , LocalStrategy = require('passport-local').Strategy,
-    User = require("./models/Task").User;
+const passport = require('passport')
+    , LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new LocalStrategy({
       usernameField: 'username',
       passwordField: 'password'
     },
     function (username, password, done) {
-      User.findOne({email: username}, function (err, user) {
+      console.log(username);
+      Admin.find({},function (err, all) {
+        console.log(all);
+      });
+      Admin.findOne({email: username}, function (err, admin) {
         "use strict";
         if (err) {
           console.error(err);
           return done(null, false, {message: 'Incorrect username.'});
         }
-        else if(user) {
-          console.log(user);
-          if (user.password !== password) return done(null, false, {message: 'Incorrect password.'});
+        else if(admin) {
+          console.log(admin);
+          if (admin.password !== password) return done(null, false, {message: 'Incorrect password.'});
         }
         else{
-          return done(null, false, {message: 'user not found'});
+          return done(null, false, {message: 'admin not found'});
         }
-        return done(null, user);
+        return done(null, admin);
 
       })
     }
@@ -88,7 +90,7 @@ app.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user) => {
     if (!err) {
       req.session.user = user;
-      res.redirect('/profile');
+      //res.redirect('/profile');
     }
   })(req, res, next)
 });
@@ -97,27 +99,29 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (user, done) {
-  User.findOne({email: user.email}, function (err, user) {
-    done(err, user);
+  Admin.findOne({email: user.email}, function (err, admin) {
+    done(err, admin);
   });
 });
 //===================================================================
 app.all('\/login|\/registerme', (req, res, next) => {
   console.log("middleware work");
-  req.checkBody('username', 'Invalid postparam').notEmpty().isEmail();
+  req.checkBody('adminname', 'Invalid postparam').notEmpty().isEmail();
   req.checkBody('password', 'Длина пароля должна быть 4-12 символов').isLength({min: 4, max: 12});
   next();
 });
 
+/*
 app.all('\/task|\/profile|\/project|\/board|\/contacts', (req, res, next) => {
-  if(req.session.user){
+  if(req.session.adminname){
     next();
   }
   else{
-    res.redirect("/login");
+    res.redirect("/admin");
   }
 });
 */
+
 app.use('/', routes);
 //app.use('/users', users);
 
