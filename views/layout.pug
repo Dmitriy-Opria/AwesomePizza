@@ -1,10 +1,46 @@
 doctype html
 html
-  head
-    title AwesomePizza
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
-    script(src="/javascripts/bootstrap.min.js")
-    script(src="/javascripts/jquery.min.js")
-  body
-    block content
+    head
+        title AwesomePizza
+        link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+        script(src="/javascripts/bootstrap.min.js")
+        script(src="/javascripts/jquery.min.js")
+        link(type="text/css" rel="stylesheet" href="stylesheets/style.css")
+        link(type="text/css" rel="stylesheet" href="stylesheets/skin.css")
+        script(type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js")
+        script(type="text/javascript" src="javascripts/jquery.jcarousel.min.js")
+        script(type="text/javascript" src="javascripts/initSlider.js")
+    body.home
+        #wrap
+            #header
+                img(src='images/logo.png')
+                #nav
+                    ul.menu
+                        li.current_page_item
+                            a(href='/') Главная
+                        li
+                            a(href='#') Ассортимент
+
+                        li
+                            a(href='portfolio.html') Доставка
+                        li
+                            a(href='/contacts') Контакты
+                        li
+                            a(href='/admin') Вход
+                // end nav
+            // end header
+        block content
+
+        #footer.text-center
+            p.copyright
+                | Copyright ©
+                a(href='#') Domain Name
+                |  - All Rights Reserved / Design By
+                a(target='_blank', href='http://www.opria.com/') Dmitriy Opria
+        // end footer
+        // end wrap
+        .cache-images
+            img(src='images/red-button-bg.png', width='0', height='0', alt='')
+            img(src='images/black-button-bg.png', width='0', height='0', alt='')
+        // end cache-images
+
