@@ -205,7 +205,9 @@ router.post('/changePizza', (req, res) => {
             $set: {
                 name: req.body.name,
                 description: req.body.description,
-                price: req.body.price
+                smallprice: req.body.smallprice,
+                middleprice: req.body.middleprice,
+                highprice: req.body.highprice
             }
         },
         {new: true},
@@ -251,20 +253,29 @@ router.post('/removeComplain', (req, res) =>{
 router.post('/orderPizza', (req, res) => {
     "use strict"
     console.log(req.body);
-    Order.create({
-        id: req.body.id,
-        size: req.body.author,
-        price: req.body.description,
-        adress: req.body.adress,
-        tel: req.body.tel
-    },(err, pizza) => {
-        if (err) {
+    Pizza.findById(req.body.id,(err,pizza)=>{
+        if(err){
             res.sendStatus(500);
         }
         else{
-            res.sendStatus(200);
+
+            Order.create({
+                id: req.body.id,
+                size: req.body.author,
+                price: parseInt(pizza[req.body.size])*parseInt(req.body.amount),
+                adress: req.body.adress,
+                tel: req.body.tel
+            },(err, pizza) => {
+                if (err) {
+                    res.sendStatus(500);
+                }
+                else{
+                    res.sendStatus(200);
+                }
+            })
         }
     })
+
 });
 router.post('/removeOrder', (req, res) => {
     "use strict";

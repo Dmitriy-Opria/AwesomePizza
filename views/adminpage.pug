@@ -23,8 +23,14 @@ block content
                             for ord in order
                                 div(id=ord._id)
                                     h4 #{orderedPizza}
-                                        small &nbsp #{performDate(ord.dateOfcreation)}
-                                    p #{ord.description}
+                                        small  Время:#{performDate(ord.dateOfcreation)}
+                                        br
+                                        small Телефон:#{ord.tel}
+                                        br
+                                        small Стоимость:#{ord.price}
+                                    h5 Адрес
+                                    p #{ord.adress}
+
                                     a(href="javascript:removeOrder('" + ord._id + "');" class="removeOrder") Удалить заказ
                                     hr
                     #tab2.tab-pane.fade.in
@@ -57,10 +63,16 @@ block content
                                                             input(id="name" name="name" value=i.name)
                                                         img(src="/" + i.cover)
                                                         .form-group
-                                                            label(for="price") Цена:
-                                                            input(id="price" name="price" value=i.price)
+                                                            label(for="price") Цена маленькой:
+                                                            input(id="price" name="smallprice" value=i.smallprice)
+                                                        .form-group
+                                                            label(for="price") Цена средней:
+                                                            input(id="price" name="middleprice" value=i.middleprice)
+                                                        .form-group
+                                                            label(for="price") Цена большой:
+                                                            input(id="price" name="highprice" value=i.highprice)
                                                     td
-                                                        textarea(name="description") #{i.description}
+                                                        textarea.text(name="description") #{i.description}
                                                     td
                                                         a(onclick="$('#change-Pizza').submit()") Сохранить изменения
                                                         br

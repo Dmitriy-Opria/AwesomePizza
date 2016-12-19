@@ -38,7 +38,7 @@ app.use(function (req, res, next) {
 });
 app.locals.performDate = function (data) {
     moment.locale(language);
-    return moment(data).format('D MMMM YYYY');
+    return moment(data).format('HH:MM D/M/Y');
 };
 //========================= session ================================
 const session = require('express-session');

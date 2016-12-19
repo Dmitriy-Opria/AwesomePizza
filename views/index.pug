@@ -19,7 +19,7 @@ block content
                             .pizza_title
                                 .ico.new
                                 h4.show-desktop #{i.name}
-                                span.price #{i.price}.00 грн.
+                                span.price #{i.middleprice}.00 грн.
                             .product-cell
                                 i.js-show-hidden_filter
                                 img.first(src=i.cover)
@@ -47,14 +47,29 @@ block content
                                         input.form-control(type="text" name="tel" id="tel")
                                         label(for='author')
                                             |Размер пиццы
-                                        select.form-control(name="size")
-                                            option(value="smallSize") 25 см.
-                                            option(value="middleSize" selected='selected') 35 см.
-                                            option(value="highSize") 50 см.
-                                        label(for='adress') Адрес
-                                        textarea.form-control(minlength='5', maxlength='512', required='' name="adress")
+                                        select.form-control#size(name="size")
+                                            option(value="smallprice") 25 см.
+                                            option(value="middleprice" selected='selected') 35 см.
+                                            option(value="highprice") 50 см.
+                                        select.form-control#amount(name="amount")
+                                            option(value="1" selected='selected') 1 шт.
+                                            option(value="2" ) 2 шт.
+                                            option(value="3") 3 см.
+                                            option(value="4" ) 4 шт.
+                                            option(value="5" ) 5 шт.
+                                            option(value="6" ) 6 шт.
+                                            option(value="7" ) 7 шт.
+                                            option(value="8" ) 8 шт.
+                                            option(value="9" ) 9 шт.
+                                            option(value="10" ) 10 шт.
 
+                                        label(for='adress') Адрес
+                                        textarea.form-control(minlength='5', maxlength='512', name="adress" required)
+                                span.prices#smallprice #{i.smallprice}
+                                span.prices#middleprice #{i.middleprice}
+                                span.prices#highprice #{i.highprice}
                                 .modal-footer.form-inline
+                                    h3#price
                                     button.btn.btn-danger(type='button', data-dismiss='modal') Отмена
                                     button.btn.btn-success(type='button' onclick="$('#orderPizza').submit()") Заказать
     script.
@@ -73,3 +88,26 @@ block content
                 })
             form.preventDefault();
         })
+        $.clearFormFields = function (area) {
+            $(area).find('input[type="text"],input[type="email"],textarea,select').val('');
+        };
+        $('.modal').on('hidden', function () {
+            $.clearFormFields(this)
+        });
+        /*
+        $('.modal').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+        });*/
+        $("#size")
+                .change(function () {
+                    var str = "";
+                    var smallprice = parseInt($("#smallprice").text());
+                    var middleprice = parseInt($("#middleprice").text());
+                    var highprice = parseInt($("#highprice").text());
+                    console.log(smallprice);
+                    $("select option:selected").each(function () {
+                        str += $(this).text() + " ";
+                    });
+                    $("price").text(str);
+                })
+                .change();
