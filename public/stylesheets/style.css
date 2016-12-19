@@ -175,6 +175,7 @@ a:hover{
 	margin:0 0 0 36px;
 	width:213px;
 	height:205px;
+	border-radius: 50%;
 }
 #featured-section .circle-red{
 	background:url(../images/circle-red.png) no-repeat;
@@ -493,4 +494,60 @@ a:hover{
 	margin:20px 0 0 0;
 	padding:15px 0 50px 0;
 	width:100%;
+}
+/* ------------ */
+/* -- Pizza Item -- */
+/* ------------ */
+.bx_catalog_item_container0{
+	position: relative;
+}
+.popup{
+	position:absolute;
+	display: none;
+	top: 44px;
+	width: 100%;
+	background: rgba(135, 141, 150, 0.7);
+	height: 264px;
+}
+.popup table{
+	color: white;
+	padding-top: 50px;
+}
+.first{
+	width:305px;
+}
+.bx_catalog_item_container0:hover .popup{
+	display:block;
+}
+.products_box {
+	background: #fff9f0 none repeat scroll 0 0;
+	border-radius: 10px;
+	box-shadow: -5px 5px 20px 0 #000;
+	float: left;
+	height: 340px;
+	margin: 20px 22px 0 0;
+	padding: 10px 0;
+	position: relative;
+	text-align: center;
+	width: 305px;
+}
+.products_box:hover{
+
+}
+.products_box h4{
+	margin: 0px;
+}
+.products_box.pizza_constructor {
+	background: rgba(0, 0, 0, 0) linear-gradient(to bottom, #8b9713 0%, #92a014 100%) repeat scroll 0 0;
+	float: right;
+	margin-right: 0;
+	position: relative;
+}
+.products_box.pizza_constructor a {
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+.price{
+	display: inline-block;
 }

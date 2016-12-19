@@ -1,31 +1,47 @@
-/**
- * Created by user4 on 14.12.16.
- */
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
-const AdminModel = new Schema({
-    name: String,
-    surname: String,
-    avatar: {type: String, default: '/images/avatars/no-avatar_jpg.jpg'},
-    email: String,
-    tel: String,
-    skype: String,
-    password: String
-});
 
 const PizzaModel = new Schema({
     name: String,
     description: String,
-    images: {type: Array, default: []},
-    price: Number
+    cover: {type: String, default: '/images/dc.png'},
+    smallprice: Number,
+    middleprice: Number,
+    highprice: Number,
+});
+const OrderModel = new Schema({
+    name: String,
+    size: String,
+    price: String,
+    adress: String,
+    tel: String
+});
+const AdminModel = new Schema({
+    name: String,
+    surname: String,
+    email: String,
+    password: String
+});
+const ComplainModel = new Schema({
+    name: String,
+    description: String,
+    email: String,
+    dateOfcreation: {type: Date, default: Date.now}
 });
 
-const connection = mongoose.createConnection('mongodb://localhost:27017/awesomepizza');
-const Admin = connection.model('Admin', AdminModel),
-      Pizza = connection.model('Pizza', PizzaModel);
+AdminModel.statics.findByEmail = (email, cb) => {
+    return this.find({email: email}, cb);
+};
 
+const connection = mongoose.createConnection('mongodb://localhost:27017/awesomepizza');
+
+const Pizza = connection.model('Pizza', PizzaModel),
+      Admin = connection.model('Admin', AdminModel),
+      Complain = connection.model('Complain', ComplainModel),
+      Order = connection.model('Order', OrderModel)  ;
 module.exports = {
+    Pizza: Pizza,
     Admin: Admin,
-    Pizza: Pizza
+    Complain: Complain,
+    Order: Order
 };

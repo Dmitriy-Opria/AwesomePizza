@@ -2,14 +2,20 @@ doctype html
 html
     head
         title AwesomePizza
-        link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
-        script(src="/javascripts/bootstrap.min.js")
+        //script(type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js")
+        //script(type="text/javascript" src="javascripts/jquery.jcarousel.min.js")
+        //script(type="text/javascript" src="javascripts/initSlider.js")
         script(src="/javascripts/jquery.min.js")
+        script(src="/javascripts/bootstrap.min.js")
+        script(src="/javascripts/site.js")
+        script(src="/javascripts/alertify.min.js")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.1/jquery-confirm.min.js")
+        link(rel='stylesheet', href='/stylesheets/alertify.min.css')
+        link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
         link(type="text/css" rel="stylesheet" href="stylesheets/style.css")
         link(type="text/css" rel="stylesheet" href="stylesheets/skin.css")
-        script(type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js")
-        script(type="text/javascript" src="javascripts/jquery.jcarousel.min.js")
-        script(type="text/javascript" src="javascripts/initSlider.js")
+        link(href='/stylesheets/jquery-confirm.min.css', rel='stylesheet')
+
     body.home
         #wrap
             #header
@@ -26,21 +32,65 @@ html
                         li
                             a(href='/contacts') Контакты
                         li
-                            a(href='/admin') Вход
+                            a(href='/login') Вход
                 // end nav
             // end header
         block content
 
         #footer.text-center
-            p.copyright
-                | Copyright ©
-                a(href='#') Domain Name
-                |  - All Rights Reserved / Design By
-                a(target='_blank', href='http://www.opria.com/') Dmitriy Opria
-        // end footer
-        // end wrap
-        .cache-images
-            img(src='images/red-button-bg.png', width='0', height='0', alt='')
-            img(src='images/black-button-bg.png', width='0', height='0', alt='')
-        // end cache-images
+            .row
+                .col-md-12
+                    button.btn.btn-success(type='button', data-toggle='modal', data-target='#myModal') Тут можна оставить свои пожелания или жалобы!
+                    br
+                    br
+                    address
+                        strong AwesomePizza.
+                        | г. Первомайск, ул. Неизвестная 13
+                        | Николаевская обл, Украина
+                        br
+                        abbr(title="Phone")
+                            | Т: (123) 456-7890
 
+                        address
+                        strong
+                            | Наш e-mail
+                        a(href="#")
+                            | &nbsp; first.last@example.com
+    #myModal.modal.fade(tabindex='-1', role='dialog')
+        .modal-dialog.custom-class(role='document')
+            .modal-content
+                .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                        span(aria-hidden='true') ×
+                    h4.modal-title Жалоба или пожелание
+                .modal-body
+                    form(id="complain" enctype="multipart/form-data" class="form-horizontal" method="POST")
+                        label(for='name') Тема сообщения
+                        input.form-control(type="text" name="name" id="name")
+                        label(for='author') Ваш E-mail
+                        input.form-control(type="email" name="author" id="author")
+                        label(for='description') Описание задачи
+                        textarea#description.form-control(minlength='5', maxlength='512', required='' name="description")
+
+                .modal-footer
+                    button.btn.btn-danger(type='button', data-dismiss='modal') Отмена
+                    button.btn.btn-success(type='button' onclick="$('#complain').submit()") Оставить
+        script.
+            $("#complain").on('submit', function (form) {
+                $.ajax({
+                    method: "POST",
+                    url: "/complain",
+                    data: $(this).serialize(),
+                    processData: false
+                })
+                    .done(function () {
+                        alertify.success("Сообщение оставлено!")
+                    })
+                    .fail(function () {
+                        alertify.error("Не удалось оставить сообщение.")
+                    })
+                    .always(function () {
+                        $("#myModal").modal("hide");
+                    });
+                form.preventDefault();
+            })

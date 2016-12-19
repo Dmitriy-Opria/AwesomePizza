@@ -76,6 +76,7 @@ build/Release
 node_modules
 bower_components
 jspm_packages
+pizzas
 
 # Optional npm cache directory
 .npm

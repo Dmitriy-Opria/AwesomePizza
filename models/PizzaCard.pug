@@ -1,0 +1,10 @@
+tr(id=pizza._id)
+    td
+        h4 #{pizza.name}
+        img(src="/" + pizza.cover)
+    td
+        p #{pizza.description}
+    td
+        a(href="#") Редактировать
+        br
+        a(href="javascript:removePizza('" + pizza._id + "');" class="removePizza") Удалить

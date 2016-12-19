@@ -1,0 +1,160 @@
+extends layout
+
+block content
+    .container-fluid
+        .col-lg-12.col-sm-6
+            .btn-pref.btn-group.btn-group-justified.btn-group-lg(role='group', aria-label='...')
+                .btn-group(role='group')
+                    button.btn.btn-primary(type='button', href='#tab1', data-toggle='tab')
+                        .hidden-xs Заказы
+                .btn-group(role='group')
+                    button.btn.btn-default(type='button', href='#tab2', data-toggle='tab')
+                        .hidden-xs Сообщения
+                .btn-group(role='group')
+                    button.btn.btn-default(type='button', href='#tab3', data-toggle='tab')
+                        .hidden-xs Продукция
+                .btn-group(role='group')
+                    button.btn.btn-default(type='button', href='#tab4', data-toggle='tab')
+                        .hidden-xs Добавить товар
+            .well
+                .tab-content
+                    #tab1.tab-pane.fade.in.active
+                        .row
+                            h2
+                                | Тут будут заказы
+                    #tab2.tab-pane.fade.in
+                        .row
+                            for comp in complain
+                                div(id=comp._id)
+                                    h4 #{comp.name}
+                                        small &nbsp #{performDate(comp.dateOfcreation)}
+                                    a(href="#") #{comp.email}
+                                    p #{comp.description}
+                                    a(href="javascript:removeComplain('" + comp._id + "');" class="removeComplain") Удалить сообщение
+                                    hr
+                    #tab3.tab-pane.fade.in
+                        .row
+                            h2.text-center Каталог товаров
+                            table.table.table-bordered
+                                thead
+                                    td.text-center(style="width:33%;") Пицца
+                                    td.text-center(style="width:33%;") Описание
+                                    td.text-center(style="width:33%;") Функции
+                                tbody#tbody
+                                    if pizza
+                                        for i in pizza
+                                            form#change-Pizza.form-inline
+                                                input(type="hidden" name="id" value=i._id)
+                                                tr(id=i._id)
+                                                    td
+                                                        .form-group
+                                                            label(for="name") Название:
+                                                            input(id="name" name="name" value=i.name)
+                                                        img(src="/" + i.cover)
+                                                        .form-group
+                                                            label(for="price") Цена:
+                                                            input(id="price" name="price" value=i.price)
+                                                    td
+                                                        textarea(name="description") #{i.description}
+                                                    td
+                                                        a(onclick="$('#change-Pizza').submit()") Сохранить изменения
+                                                        br
+                                                        a(href="javascript:removePizza('" + i._id + "');" class="removePizza") Удалить
+                                    else
+                                        h2
+                                            | Тут будет товар
+                    #tab4.tab-pane.fade.in
+                        .row
+                            .col-md-2
+                            .col-md-8
+                                h2.text-center
+                                    | Добавить товар
+                                form#create-form(action="/createPizza" method="POST" enctype="multipart/form-data" class="form-horizontal")
+                                    .form-group
+                                        label(for="name")
+                                            | Название
+                                        input(type="text" class="form-control" id="name" placeholder="Название" name="name")
+
+                                    .form-group
+                                        .col-md-4
+                                            label(for="smallPrice")
+                                                | Цена маленькой(грн.)
+                                            input(type="text" class="form-control" id="smallPrice" placeholder="Цена" name="smallPrice")
+                                        .col-md-4
+                                            label(for="middlePrice")
+                                                | Цена средней(грн.)
+                                            input(type="text" class="form-control" id="middlePrice" placeholder="Цена" name="middlePrice")
+                                        .col-md-4
+                                            label(for="highPrice")
+                                                | Цена большой(грн.)
+                                            input(type="text" class="form-control" id="highPrice" placeholder="Цена" name="highPrice")
+                                    .form-group
+                                        label(for='description')
+                                            | Описание
+                                        textarea( class="form-control" id="description" minlength='5', maxlength='512', required='' name="description")
+                                    .form-group
+                                        label(for='InputFile') Вложить фотографии
+                                        input(type='file' class="inline" name="file" id='InputFile' accept="image/jpeg,image/png,image/gif" multiple)
+                                    button(type="submit" class="btn btn-success btn-lg btn-block")
+                                        i(class="fa fa-check" aria-hidden="true")
+                                        | &nbsp; Добавить
+                            .col-md-2
+
+
+    script.
+        $("#create-form").on('submit', function (form) {
+            $.ajax({
+                method: "POST",
+                url: "/createPizza",
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            })
+                .done(function (template) {
+                $("#tbody")
+                    .append(template.html)
+                    alertify.success("Пицца добавлена в список товаров!")
+                })
+                .fail(function (error) {
+                    alertify.error("Не удалось добавить.")
+                })
+            form.preventDefault();
+        })
+        $("#change-Pizza").on('submit', function (form) {
+            $.ajax({
+                method: "POST",
+                url: "/changePizza",
+                data: $(this).serialize(),
+                processData: false
+            })
+                .done(function (template) {
+                    alertify.success("Изменения сохранены!")
+                })
+                .fail(function (error) {
+                    alertify.error("Не удалось сохранить.")
+                })
+            form.preventDefault();
+        })
+
+        $(".removePizza").confirm({
+            title: 'Удалить пиццу?',
+            content: 'Пицца будет удалена',
+            buttons: {
+                OK: function () {
+                    location.href = this.$target.attr('href');
+                },
+                ОТМЕНА: function () {
+                }
+            }
+        });
+        $(".removeComplain").confirm({
+            title: 'Удалить сообщение?',
+            content: 'Сообщение будет удалено',
+            buttons: {
+                OK: function () {
+                    location.href = this.$target.attr('href');
+                },
+                ОТМЕНА: function () {
+                }
+            }
+        });

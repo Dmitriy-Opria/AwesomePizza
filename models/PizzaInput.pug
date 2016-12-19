@@ -1,0 +1,10 @@
+form#change-pizza(action="/changePizza" method="POST" enctype="multipart/form-data")
+    td
+        h4
+            input(name="name" value=pizza.name)
+        img(src="/" + pizza.cover)
+    td
+        textarea(name="description") #{pizza.description}
+    td
+        button.btn.btn-success(type="submit")
+            | Сохранить изменения
