@@ -57,3 +57,19 @@ block content
                                 .modal-footer.form-inline
                                     button.btn.btn-danger(type='button', data-dismiss='modal') Отмена
                                     button.btn.btn-success(type='button' onclick="$('#orderPizza').submit()") Заказать
+    script.
+        $("#orderPizza").on('submit', function (form) {
+            $.ajax({
+                method: "POST",
+                url: "/orderPizza",
+                data: $(this).serialize(),
+                processData: false
+            })
+                .done(function (template) {
+                    alertify.success("Изменения сохранены!")
+                })
+                .fail(function (error) {
+                    alertify.error("Не удалось сохранить.")
+                })
+            form.preventDefault();
+        })

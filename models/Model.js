@@ -10,11 +10,12 @@ const PizzaModel = new Schema({
     highprice: Number,
 });
 const OrderModel = new Schema({
-    name: String,
+    id: String,
     size: String,
     price: String,
     adress: String,
-    tel: String
+    tel: String,
+    dateOfcreation: {type: Date, default: Date.now}
 });
 const AdminModel = new Schema({
     name: String,

@@ -20,8 +20,13 @@ block content
                 .tab-content
                     #tab1.tab-pane.fade.in.active
                         .row
-                            h2
-                                | Тут будут заказы
+                            for ord in order
+                                div(id=ord._id)
+                                    h4 #{orderedPizza}
+                                        small &nbsp #{performDate(ord.dateOfcreation)}
+                                    p #{ord.description}
+                                    a(href="javascript:removeOrder('" + ord._id + "');" class="removeOrder") Удалить заказ
+                                    hr
                     #tab2.tab-pane.fade.in
                         .row
                             for comp in complain
@@ -139,6 +144,17 @@ block content
         $(".removePizza").confirm({
             title: 'Удалить пиццу?',
             content: 'Пицца будет удалена',
+            buttons: {
+                OK: function () {
+                    location.href = this.$target.attr('href');
+                },
+                ОТМЕНА: function () {
+                }
+            }
+        });
+        $(".removeOrder").confirm({
+            title: 'Удалить заказ?',
+            content: 'Заказ будет удален',
             buttons: {
                 OK: function () {
                     location.href = this.$target.attr('href');

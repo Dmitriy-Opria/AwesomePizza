@@ -49,6 +49,22 @@ function removeComplain(taskID) {
         })
     taskID.preventDefault()
 }
+function removeOrder(taskID) {
+    "use strict";
+    $.ajax({
+        method: "POST",
+        url: "/removeOrder",
+        data: {id: taskID}
+    })
+        .done(function () {
+            $("#"+taskID).css("display", "none");
+            alertify.success("Заказ удален");
+        })
+        .fail(function () {
+            alertify.error("Случилась ошибка удаления!");
+        })
+    taskID.preventDefault()
+}
 $("#orderPizza").on('submit', function (form) {
     $.ajax({
         method: "POST",

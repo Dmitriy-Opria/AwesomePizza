@@ -62,7 +62,21 @@ router.get('/adminpage', (req, res) => {
                         res.status(500);
                     }
                     else{
-                        res.render("adminpage", {pizza : pizza, complain: complain});
+                        Order.find({},(err, order) =>{
+                            if(err){
+                                res.status(500);
+                            }
+                            else{
+                                Pizza.findById(order.id,(err, orderedPizza)=>{
+                                    if(err){
+                                        res.status(500);
+                                    }
+                                    else{
+                                        res.render("adminpage", {pizza : pizza, complain: complain, order: order, orderedPizza: orderedPizza});
+                                    }
+                                })
+                            }
+                        })
                     }
                 })
 
@@ -238,7 +252,7 @@ router.post('/orderPizza', (req, res) => {
     "use strict"
     console.log(req.body);
     Order.create({
-        name: req.body.name,
+        id: req.body.id,
         size: req.body.author,
         price: req.body.description,
         adress: req.body.adress,
@@ -252,4 +266,21 @@ router.post('/orderPizza', (req, res) => {
         }
     })
 });
+router.post('/removeOrder', (req, res) => {
+    "use strict";
+    if (!req.body.id) res.sendStatus(400);
+    Order.findById(req.body.id,(err, doc) => {
+            doc.remove({_id: req.body.id},(err) => {
+                if (err) {
+                    res.sendStatus(500);
+                }
+                else {
+                    res.sendStatus(200)
+
+                }
+            });
+
+    });
+});
+
 module.exports = router;
