@@ -31,8 +31,8 @@ block content
                                                 p #{i.description}
                                 .hidden_filter()
                                     i
-                                        button.btn.btn-success(type='button', data-toggle='modal', data-target="#"+i._id) Заказать
-                    .modal.fade(tabindex='-1', role='dialog' id=i._id)
+                                        button.btn.btn-success.purchase(data-toggle='modal',  type='button', data-target="#"+i._id data-id=i._id  data-smallprice=i.smallprice data-middleprice=i.middleprice data-highprice=i.highprice ) Заказать
+                    .modal.fade(tabindex='-1', role='dialog' id="mod")
                         .modal-dialog.custom-class(role='document')
                             .modal-content
                                 .modal-header
@@ -47,21 +47,21 @@ block content
                                         input.form-control(type="text" name="tel" id="tel")
                                         label(for='author')
                                             |Размер пиццы
-                                        select.form-control#size(name="size")
+                                        select.form-control.sizes(name="size" autocomplete="off" id="size")
                                             option(value="smallprice") 25 см.
                                             option(value="middleprice" selected='selected') 35 см.
                                             option(value="highprice") 50 см.
-                                        select.form-control#amount(name="amount")
-                                            option(value="1" selected='selected') 1 шт.
+                                        select.form-control.amounts(name="amount" id="amount")
+                                            option(value="1" selected='selected' autocomplete="off") 1 шт.
                                             option(value="2" ) 2 шт.
-                                            option(value="3") 3 см.
+                                            option(value="3" ) 3 см.
                                             option(value="4" ) 4 шт.
                                             option(value="5" ) 5 шт.
                                             option(value="6" ) 6 шт.
                                             option(value="7" ) 7 шт.
                                             option(value="8" ) 8 шт.
                                             option(value="9" ) 9 шт.
-                                            option(value="10" ) 10 шт.
+                                            option(value="10") 10 шт.
 
                                         label(for='adress') Адрес
                                         textarea.form-control(minlength='5', maxlength='512', name="adress" required)
@@ -69,7 +69,7 @@ block content
                                 span.prices#middleprice #{i.middleprice}
                                 span.prices#highprice #{i.highprice}
                                 .modal-footer.form-inline
-                                    h3#price
+                                    h3#price #{i.middleprice}
                                     button.btn.btn-danger(type='button', data-dismiss='modal') Отмена
                                     button.btn.btn-success(type='button' onclick="$('#orderPizza').submit()") Заказать
     script.
@@ -86,6 +86,9 @@ block content
                 .fail(function (error) {
                     alertify.error("Не удалось сохранить.")
                 })
+                .always(function () {
+                   $(".modal").modal("hide");
+                });
             form.preventDefault();
         })
         $.clearFormFields = function (area) {
@@ -98,46 +101,46 @@ block content
         $('.modal').on('hidden.bs.modal', function () {
             $(this).find('form')[0].reset();
         });*/
-        console.log($("#size"));
+        $(".purchase").on("click", function (e) {
+            console.log($(e.target).data("smallprice"));
+            var smallprice = $(e.target).data("smallprice");
+            var middleprice = $(e.target).data("middleprice");
+            var highprice = $(e.target).data("highprice");
+            var id = $(e.target).data("id");
+            $(".sizes option:eq(0)").val(smallprice)
+            $(".sizes option:eq(1)").val(middleprice)
+            $(".sizes option:eq(2)").val(highprice)
+            $('#mod').modal('toggle')
+            $(".amounts option:eq(0)").val(1)
+            $(".amounts option:eq(1)").val(2)
+            $(".amounts option:eq(2)").val(3)
+            $(".amounts option:eq(3)").val(4)
+            $(".amounts option:eq(4)").val(5)
+            $(".amounts option:eq(5)").val(6)
+            $(".amounts option:eq(6)").val(7)
+            $(".amounts option:eq(7)").val(8)
+            $(".amounts option:eq(8)").val(9)
+            $(".amounts option:eq(9)").val(10)
+
+        })
         $("#size")
-                .change(function () {
-                    var str = "";
-                    var smallprice = parseInt($("#smallprice").text());
-                    var middleprice = parseInt($("#middleprice").text());
-                    var highprice = parseInt($("#highprice").text());
-                    $("#size option:selected").each(function () {
-                        if (this.innerHTML == "25 см.") {
-                            str = parseInt(smallprice);
-                        }
-                        else if (this.innerHTML == "35 см.") {
-                            str = parseInt(middleprice);
-                        }
-                        else {
-                            str = parseInt(highprice);
-                        }
-                        console.log(str)
-                        $("#price").text(str);
-                    });
+                .change(function (e) {
+                    var size = $(e.target).val();
+                    $("#amount").val(1);
+                    var str = size;
                     $("#amount")
-                        .change(function () {
-                            $("#amount option:selected").each(function () {
-                                var amount = this.innerHTML.split(' ');
-                                var number = amount[0];
-                                $("#size option:selected").each(function () {
-                                    if (this.innerHTML == "25 см.") {
-                                        str = parseInt(smallprice)*parseInt(number);
-                                    }
-                                    else if (this.innerHTML == "35 см.") {
-                                        str =  parseInt(middleprice)*parseInt(number);
-                                    }
-                                    else {
-                                        str = parseInt(highprice) * parseInt(number);;
-                                    }
-                                    console.log(str)
-                                });
-                                $("#price").text(str);
+                            .change(function (f) {
+                                $("#amount option:selected").each(function () {
+                                    var amount = $(f.target).val();
+                                    str = size * amount;
+                                    $("#price").text(str);
+                                    return;
+                                })
                             })
-                        })
 
-
-                })
+                    $("#price").text(str);
+                });
+        $('.modal').on('hidden.bs.modal', function () {
+            $("#amount").val(1);
+            $("#size").val("middleprice");
+        })
