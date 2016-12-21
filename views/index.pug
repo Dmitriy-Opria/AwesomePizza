@@ -82,6 +82,7 @@ block content
             })
                 .done(function (template) {
                     alertify.success("Изменения сохранены!")
+                    location.reload();
                 })
                 .fail(function (error) {
                     alertify.error("Не удалось сохранить.")
@@ -102,7 +103,7 @@ block content
             $(this).find('form')[0].reset();
         });*/
         $(".purchase").on("click", function (e) {
-            console.log($(e.target).data("smallprice"));
+            //console.log($(e.target).data("smallprice"));
             var smallprice = $(e.target).data("smallprice");
             var middleprice = $(e.target).data("middleprice");
             var highprice = $(e.target).data("highprice");
@@ -140,6 +141,15 @@ block content
 
                     $("#price").text(str);
                 });
+        $("#amount")
+                .change(function (f) {
+                    var size = $(e.target).val();
+                    $("#amount option:selected").each(function () {
+                        var amount = $(f.target).val();
+                        var str = $(".sizes option:eq(1)").val() * amount;
+                        $("#price").text(str);
+                    })
+                })
         $('.modal').on('hidden.bs.modal', function () {
             $("#amount").val(1);
             $("#size").val("middleprice");

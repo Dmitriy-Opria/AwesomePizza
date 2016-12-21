@@ -262,7 +262,7 @@ router.post('/orderPizza', (req, res) => {
             Order.create({
                 id: req.body.id,
                 size: req.body.author,
-                price: parseInt(pizza[req.body.size])*parseInt(req.body.amount),
+                price: parseInt(req.body.size)*parseInt(req.body.amount),
                 adress: req.body.adress,
                 tel: req.body.tel
             },(err, pizza) => {
