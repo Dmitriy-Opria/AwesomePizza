@@ -98,16 +98,46 @@ block content
         $('.modal').on('hidden.bs.modal', function () {
             $(this).find('form')[0].reset();
         });*/
+        console.log($("#size"));
         $("#size")
                 .change(function () {
                     var str = "";
                     var smallprice = parseInt($("#smallprice").text());
                     var middleprice = parseInt($("#middleprice").text());
                     var highprice = parseInt($("#highprice").text());
-                    console.log(smallprice);
-                    $("select option:selected").each(function () {
-                        str += $(this).text() + " ";
+                    $("#size option:selected").each(function () {
+                        if (this.innerHTML == "25 см.") {
+                            str = parseInt(smallprice);
+                        }
+                        else if (this.innerHTML == "35 см.") {
+                            str = parseInt(middleprice);
+                        }
+                        else {
+                            str = parseInt(highprice);
+                        }
+                        console.log(str)
+                        $("#price").text(str);
                     });
-                    $("price").text(str);
+                    $("#amount")
+                        .change(function () {
+                            $("#amount option:selected").each(function () {
+                                var amount = this.innerHTML.split(' ');
+                                var number = amount[0];
+                                $("#size option:selected").each(function () {
+                                    if (this.innerHTML == "25 см.") {
+                                        str = parseInt(smallprice)*parseInt(number);
+                                    }
+                                    else if (this.innerHTML == "35 см.") {
+                                        str =  parseInt(middleprice)*parseInt(number);
+                                    }
+                                    else {
+                                        str = parseInt(highprice) * parseInt(number);;
+                                    }
+                                    console.log(str)
+                                });
+                                $("#price").text(str);
+                            })
+                        })
+
+
                 })
-                .change();
